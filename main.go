@@ -74,6 +74,9 @@ for rows.Next() {
 // print the length, and all the birds
 fmt.Printf("found %d birds: %+v", len(birds), birds)
 
+//***************Inserting data *****************************************************************************/////
+
+
 // sample data that we want to insert
 newBird := Bird{
 	Species:     "rooster",
