@@ -51,8 +51,50 @@ if err := row.Scan(&bird.Species, &bird.Description); err != nil {
 	log.Fatalf("could not scan row: %v", err)
 }
 fmt.Printf("found bird: %+v\n", bird)
+///**********************Querrying Multiple Birds*********************88//
+rows, err := db.Query("SELECT bird, description FROM birds limit 10")
+if err != nil {
+	log.Fatalf("could not execute query: %v", err)
+}
+// create a slice of birds to hold our results
+birds := []Bird{}
 
+// iterate over the returned rows
+// we can go over to the next row by calling the `Next` method, which will
+// return `false` if there are no more rows
+for rows.Next() {
+	bird := Bird{}
+	// create an instance of `Bird` and write the result of the current row into it
+	if err := rows.Scan(&bird.Species, &bird.Description); err != nil {
+		log.Fatalf("could not scan row: %v", err)
+	}
+	// append the current instance to the slice of birds
+	birds = append(birds, bird)
+}
+// print the length, and all the birds
+fmt.Printf("found %d birds: %+v", len(birds), birds)
 
+// sample data that we want to insert
+newBird := Bird{
+	Species:     "rooster",
+	Description: "wakes you up in the morning",
+}
+// the `Exec` method returns a `Result` type instead of a `Row`
+// we follow the same argument pattern to add query params
+result, err := db.Exec("INSERT INTO birds (bird, description) VALUES ($1, $2)", newBird.Species, newBird.Description)
+if err != nil {
+	log.Fatalf("could not insert row: %v", err)
+}
 
+// the `Result` type has special methods like `RowsAffected` which returns the
+// total number of affected rows reported by the database
+// In this case, it will tell us the number of rows that were inserted using
+// the above query
+rowsAffected, err := result.RowsAffected()
+if err != nil {
+	log.Fatalf("could not get affected rows: %v", err)
+}
+// we can log how many rows were inserted
+fmt.Println("inserted", rowsAffected, "rows")
 
 }
