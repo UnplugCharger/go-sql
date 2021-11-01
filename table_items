@@ -1,0 +1,11 @@
+INSERT INTO birds (bird, description) 
+VALUES
+
+('olwith', 'Nego gwen Pile'),
+('aluru', 'Mit aduwa'),
+('mire', 'tin miwuoro'),
+('oyundi', 'tiende lit'),
+('osogo', 'winyo'),
+('achuth', 'tiende bor'),
+('odis', 'randere'),
+('opija', 'kaeli');
